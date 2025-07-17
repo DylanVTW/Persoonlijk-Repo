@@ -1,15 +1,15 @@
 <?php
-/* Smarty version 5.5.0, created on 2025-07-09 14:10:54
+/* Smarty version 5.5.0, created on 2025-07-17 10:33:37
   from 'file:characterList.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.0',
-  'unifunc' => 'content_686e786e719066_72353223',
+  'unifunc' => 'content_6878d181124887_12378666',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    'dc61181a4a73b4952532af59e69ccc5089736030' => 
+    '100290167daccf1621262c0252313716fa0e3b79' => 
     array (
       0 => 'characterList.tpl',
       1 => 1752070071,
@@ -20,21 +20,21 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686e786e719066_72353223 (\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
+function content_6878d181124887_12378666 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\wamp64\\www\\Persoonlijk-Repo\\OOP_rpg\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1442216957686e786e6fd180_80536568', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10659135166878d1810fabb2_15944208', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, 'layout.tpl', $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_1442216957686e786e6fd180_80536568 extends \Smarty\Runtime\Block
+class Block_10659135166878d1810fabb2_15944208 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
+$_smarty_current_dir = 'C:\\wamp64\\www\\Persoonlijk-Repo\\OOP_rpg\\templates';
 ?>
 
 <div class="card my-4">

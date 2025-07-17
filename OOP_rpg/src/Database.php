@@ -44,7 +44,7 @@ interface Database
      * @param string[] $conditions
      * @return int
      */
-    public function delete();
+    public function delete(string $table, array $conditions);
 
     /**
      * 

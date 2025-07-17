@@ -55,12 +55,21 @@ class CharacterList
 
     public function removeCharacter(Character $character): string
     {
+        $name = $character->getName();
+        $role = $character->getRole();
         $key = array_search($character, $this->characters);
-        if ($key !== false) {
+        if ($key !== false){
             unset($this->characters[$key]);
-            return "Character {$character->getName()} was removed from the list.";
+            $this->characters = array_values($this->characters);
+            
+        \Game\Character::removeCharacterFromStats($name, $role);
+
+        return "Character {$character->getName()} was removed from the list.";
         }
-        return "Character {$character->getName()} was not found in the list.";
-    }
+            
+            return "Character {$character->getName()} was not found in the list.";
+        }
+        
+    
 
 }

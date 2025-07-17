@@ -1,7 +1,7 @@
 <?php
 
 namespace Game;
-class Character
+abstract class Character 
 {
     // Basis properties als private properties
     private string $name;
@@ -16,6 +16,14 @@ class Character
 
     protected int $tempDefense = 0;
 
+    protected array $specialAttacks = [];
+    
+    public static $totalCharacter = 0;
+    
+    public static $characterTypes = [];
+
+    public static $existingNames = [];
+
     // Constructor vervangen door setCharacter methode
     public function __construct($name, $role, $health, $attack, $defense, $range)
     {
@@ -25,7 +33,14 @@ class Character
         $this->attack = $attack;
         $this->defense = $defense;
         $this->range = $range;
-        $this->inventory = []; 
+        $this->inventory = [];
+        
+        self::$totalCharacter++;
+
+        self::$characterTypes[] = $this->role;
+
+
+        self::$existingNames[] = $this->name;
     }
 
     // Getter voor Inventory
@@ -63,6 +78,11 @@ class Character
     public function getRange()
     {
         return $this->range;
+    }
+
+    public function getSpecialAttacks()
+    {
+        return $this->specialAttacks;
     }
 
     // Setters voor alle properties
@@ -115,6 +135,107 @@ class Character
         return "Name: {$this->name}, Role: {$this->role}, Health: {$this->health}, Attack: {$this->getAttack()}, Defense: {$this->getDefense()}, Range: {$this->range}";
     }
 
+    public abstract function executeSpecialAttack(string $attackName): string;
+    
+
+    
+
+    public abstract function resetAttributes(): void;  
+    
+    
+    private static function loadFromSession(): void
+    {
+        if (isset($_SESSION['characterList']) && is_array($_SESSION['characterStats'])) {
+
+            $stats = $_SESSION['characterStats'];
+            self::$totalCharacter = $stats['totalCharacter'] ?? 0;
+            self::$characterTypes = $stats['characterTypeCounts'] ?? [];
+            self::$existingNames = $stats['characterNames'] ?? [];
+        }
+        
+    }
+
+    private static function saveToSession(): void
+    {
+        $_SESSION['characterStats'] = [
+            'totalCharacter' => self::$totalCharacter,
+            'characterTypeCounts' => self::$characterTypes,
+            'characterNames' => self::$existingNames
+        ];
+    }
+
+    public static function getTotalCharacter(): int
+    {
+        self::loadFromSession();
+        return self::$totalCharacter;
+    }
+
+    public static function getAllCharacterTypes(): array
+    {
+        self::loadFromSession();
+        return self::$characterTypes;
+    }
+
+    public static function getAllCharacterNames(): array
+    {
+        self::loadFromSession();
+        return self::$existingNames;
+    }
+
+    public static function getCharacterTypeCount(string $type): int
+    {
+        self::loadFromSession();
+        return count(array_filter(self::$characterTypes, fn($t) => $t === $type));
+    }
+
+    public static function resetAllStatistics (): void
+    {
+        self::$totalCharacter = 0;
+        self::$characterTypes = [];
+        self::$existingNames = [];
+        self::saveToSession();
+    }
+
+    public static function recalculateStatistics(CharacterList $characterList ): void
+    {
+        self::resetAllStatistics();
+
+        foreach ($characterList->getCharacters() as $character) {
+            self::$totalCharacter++;
+            self::$characterTypes[] = $character->getRole();
+            self::$existingNames[] = $character->getName();
+        }
+
+        self::saveToSession();
+
+    }   
+
+    public static function removeCharacterFromStats(string $name, string $role): void
+    {
+
+        $nameKey = array_search($name, self::$existingNames);
+        $roleKey = array_search($role, self::$characterTypes);
+        if($nameKey !== false && $roleKey !== false) {
+            unset(self::$existingNames[$nameKey]);
+            unset(self::$characterTypes[$roleKey]);
+            self::$existingNames = array_values(self::$existingNames);
+            self::$characterTypes = array_values(self::$characterTypes);
+            self::$totalCharacter--;
+            self::saveToSession();
+        } 
+    }
+
+    public static function initializeSession(): void
+    {
+        self::loadFromSession();
+    }
+
+    public static function saveSession(): void
+    {
+        self::saveToSession();
+    }
+
+    
 }
 
 ?>

@@ -1,14 +1,11 @@
 <?php
-
 namespace Game;
-
 class Item
 {
     private ?int $id;
     private string $name;
     private string $type;
     private float $value;
-
     public function __construct(string $name, string $type, float $value, ?int $id = null)
     {
         $this->name = $name;
@@ -16,12 +13,10 @@ class Item
         $this->value = $value;
         $this->id = $id;
     }
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getName(): string
     {
         return $this->name;
@@ -40,91 +35,66 @@ class Item
     }
     public function toString(): string
     {
-        return "name: . {$this->getName()} . type: . {$this->getType()} .  value: . {$this->getValue()}";
+        return "Name: {$this->getName()}, Type: {$this->getType()}, Value: {$this->getValue()}";
     }
-
     public function toDatabaseArray(): array
     {
         return [
-            'name' => $this->getName(),
-            'type' => $this->getType(),
-            'value' => $this->getValue(),
+            "name" => $this->getName(),
+            "type" => $this->getType(),
+            "value" => $this->getValue()
         ];
     }
-
     public function save(): bool
     {
         try {
-            $databse = DatabaseManager::getInstance();
-            if ($databse === null) {
-                return false;
-            }
-
-
-            $itemData = $this->toDatabaseArray();
-            $insertedId = $databse->insert('item', $itemData);
+            $database = DatabaseManager::getInstance();
+            if ($database === null) return false;
+            $itemsData = $this->toDatabaseArray();
+            $insertedId = $database->insert("items", $itemsData);
             $this->setId($insertedId);
             return true;
         } catch (\PDOException $error) {
             return false;
         }
-
-
     }
-    public function update(): int
+    public function update(): bool
     {
         try {
-            if ($this->id === null) {
-                return false;
-            }
+            if ($this->id === null) return false;
             $database = DatabaseManager::getInstance();
-            if ($database === null) {
-                return false;
-            }
-            $itemData = $this->toDatabaseArray();
-            $affectedRows = $database->update('item', $itemData, ["id" => $this->id]);
+            if ($database === null) return false;
+            $itemsData = $this->toDatabaseArray();
+            $affectedRows = $database->update("items", $itemsData, ["id" => $this->id]);
             return $affectedRows > 0;
         } catch (\PDOException $error) {
-            throw new \PDOException($error->getMessage());
+            throw new \PDOException("Update Failed: " . $error->getMessage());
         }
     }
-
+    static public function loadFromDatabase(int $id): ?Item
+    {
+        try {
+            $database = DatabaseManager::getInstance();
+            if ($database === null) return null;
+            $result = $database->select(["items" => ["*"]], ["id" => $id]);
+            if (empty($result)) return null;
+            $row = $result[0];
+            return new Item($row["name"], $row["type"], $row["value"], $row["id"]);
+        } catch (\PDOException $error) {
+            throw new \PDOException("Load Failed: ",  $error->getMessage());
+        }
+    }
     public function delete(): bool
     {
         try {
-            if ($this->id === null) {
-                return false;
-            }
             $database = DatabaseManager::getInstance();
             if ($database === null) {
                 return false;
             }
-            $affectedRows = $database->delete('item', ['id' => $this->id]);
+            $affectedRows = $database->delete("items", ["id" => $this->id]);
             return $affectedRows > 0;
         } catch (\PDOException $error) {
-            throw new \PDOException("De delete query is mislukt: " . $error->getMessage());
+            throw new \PDOException("Delete Failed: " . $error->getMessage());
         }
     }
-    public static function loadFromDatabase(int $id): ?item
-    {
-        try {
-            $database = DatabaseManager::getInstance();
-            if ($database === null) {
-                return null;
-            }
-
-            $result = $database->select(['item' => ['*']], ['id' => $id]);
-            if (empty($result)) {
-                return null;
-            }
-            $row = $result[0];
-
-            return new Item((int) $row['name'], $row['type'], (float) $row['value'], $row['id']);
-
-        } catch (\PDOException $error) {
-            throw new \PDOException("De select query is mislukt: " . $error->getMessage());
-        }
-    }
-
-
 }

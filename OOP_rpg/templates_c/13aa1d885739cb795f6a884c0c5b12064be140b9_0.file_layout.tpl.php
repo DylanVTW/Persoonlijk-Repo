@@ -1,15 +1,15 @@
 <?php
-/* Smarty version 5.5.0, created on 2025-07-10 12:42:22
+/* Smarty version 5.5.0, created on 2025-07-17 10:33:33
   from 'file:layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.0',
-  'unifunc' => 'content_686fb52e7593f4_60045671',
+  'unifunc' => 'content_6878d17dde9a87_17956140',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    '95634ed8efad9c208f8e8613b4c14a66de58eb41' => 
+    '13aa1d885739cb795f6a884c0c5b12064be140b9' => 
     array (
       0 => 'layout.tpl',
       1 => 1752150858,
@@ -20,8 +20,8 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fb52e7593f4_60045671 (\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
+function content_6878d17dde9a87_17956140 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\wamp64\\www\\Persoonlijk-Repo\\OOP_rpg\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
 <!DOCTYPE html>
@@ -304,7 +304,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <!-- Begin page content -->
     <main class="flex-shrink-0">
       <div class="container"><?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1386710778686fb52e7585a7_58958915', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6312531856878d17dde89d4_01048583', "content");
 ?>
 </div>
     </main>
@@ -322,10 +322,10 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1386710778686
 </html>
 <?php }
 /* {block "content"} */
-class Block_1386710778686fb52e7585a7_58958915 extends \Smarty\Runtime\Block
+class Block_6312531856878d17dde89d4_01048583 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
+$_smarty_current_dir = 'C:\\wamp64\\www\\Persoonlijk-Repo\\OOP_rpg\\templates';
 }
 }
 /* {/block "content"} */

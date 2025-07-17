@@ -24,6 +24,9 @@
             {if $character->getRole() == 'Healer' && $character->getSpirit() !== null}
                 <p class="card-text"><strong>Spirit:</strong> {$character->getSpirit()}</p>
             {/if}
+            {if $character->getRole() == 'Tank' && $character->getShield() !== null}
+                <p class="card-text"><strong>Shield:</strong> {$character->getShield()}</p>
+            {/if}
 
             <hr>
             <div class="card-text">

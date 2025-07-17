@@ -10,5 +10,4 @@
             Veel plezier en succes!
         </p>
     </div>
-</div>
 {/block}

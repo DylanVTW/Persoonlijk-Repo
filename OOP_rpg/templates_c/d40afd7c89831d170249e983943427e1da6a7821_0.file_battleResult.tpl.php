@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.0, created on 2025-07-04 15:20:18
+/* Smarty version 5.5.0, created on 2025-07-09 20:37:58
   from 'file:battleResult.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.0',
-  'unifunc' => 'content_6867f1321e2a59_62405840',
+  'unifunc' => 'content_686ed326b89553_00592317',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd40afd7c89831d170249e983943427e1da6a7821' => 
     array (
       0 => 'battleResult.tpl',
-      1 => 1751642414,
+      1 => 1752093471,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,17 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6867f1321e2a59_62405840 (\Smarty\Template $_smarty_tpl) {
+function content_686ed326b89553_00592317 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
- <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_939182326867f13214c964_67127231', "content");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, 'layout.tpl', $_smarty_current_dir);
+ 
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_386979795686ed326b6f989_73464099', "content");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, 'layout.tpl', $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_939182326867f13214c964_67127231 extends \Smarty\Runtime\Block
+class Block_386979795686ed326b6f989_73464099 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
@@ -40,102 +39,8 @@ $_smarty_current_dir = 'C:\\wamp64\\www\\Herhaling-LJ1\\OOP_rpg\\templates';
 <div class="container my-5">
   <h2 class="mb-4 text-center">Battle Result</h2>
   <div class="row justify-content-center mb-4">
-    <div class="col-md-5">
-      <div class="card mb-3">
-        <div class="card-header bg-primary text-white">
-          <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getName();?>
-
-          (<?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getRole();?>
-)
-        </div>
-        <div class="card-body">
-          <p>
-            <strong>Health:</strong>
-            <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getHealth();?>
-
-            <span class="text-muted"
-              >(origineel: <?php echo $_smarty_tpl->getValue('battle')->getFighter1OriginalHealth();?>
-)</span
-            >
-          </p>
-          <p><strong>Attack:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getAttack();?>
-</p>
-          <p>
-            <strong>Defense:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getDefense();?>
-
-          </p>
-          <p><strong>Range:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getRange();?>
-</p>
-
-<?php if ($_smarty_tpl->getValue('battle')->getFighter1()->getRole() == 'Warrior' && !is_array($_smarty_tpl->getValue('battle')->getFighter1()->getRage())) {?>
-            <p><strong>Rage:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getRage();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter1()->getRole() == 'Mage' && !is_array($_smarty_tpl->getValue('battle')->getFighter1()->getMana())) {?>
-            <p><strong>Mana:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getMana();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter1()->getRole() == 'Rogue' && !is_array($_smarty_tpl->getValue('battle')->getFighter1()->getEnergy())) {?>
-            <p><strong>Energy:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getEnergy();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter1()->getRole() == 'Healer' && !is_array($_smarty_tpl->getValue('battle')->getFighter1()->getSpirit())) {?>
-            <p><strong>Spirit:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getSpirit();?>
-</p>
-<?php }?>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 d-flex align-items-center justify-content-center">
-      <span class="display-6">VS</span>
-    </div>
-    <div class="col-md-5">
-      <div class="card mb-3">
-        <div class="card-header bg-success text-white">
-          <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getName();?>
-
-          (<?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getRole();?>
-)
-        </div>
-        <div class="card-body">
-          <p>
-            <strong>Health:</strong>
-            <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getHealth();?>
-
-            <span class="text-muted"
-              >(origineel: <?php echo $_smarty_tpl->getValue('battle')->getFighter2OriginalHealth();?>
-)</span
-            >
-          </p>
-          <p><strong>Attack:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getAttack();?>
-</p>
-          <p>
-            <strong>Defense:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getDefense();?>
-
-          </p>
-          <p><strong>Range:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getRange();?>
-</p>
-
-
-<?php if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Warrior' && !is_array($_smarty_tpl->getValue('battle')->getFighter2()->getRage())) {?>
-            <p><strong>Rage:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getRage();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Mage' && !is_array($_smarty_tpl->getValue('battle')->getFighter2()->getMana())) {?>
-            <p><strong>Mana:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getMana();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Rogue' && !is_array($_smarty_tpl->getValue('battle')->getFighter2()->getEnergy())) {?>
-            <p><strong>Energy:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getEnergy();?>
-</p>
-<?php }
-if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Healer' && !is_array($_smarty_tpl->getValue('battle')->getFighter2()->getSpirit())) {?>
-            <p><strong>Spirit:</strong> <?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getSpirit();?>
-</p>
-<?php }?>
-        </div>
-      </div>
-    </div>
+    <!-- ... bestaande character cards ... -->
+    <!-- (deze sectie blijft ongewijzigd) -->
   </div>
 
   <div class="alert alert-info text-center mb-4">
@@ -147,29 +52,62 @@ if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Healer' && !i
     <?php }?>
   </div>
 
-  <!-- Battle bediening -->
+  <!-- Battle bediening met keuzelijsten voor aanvallen -->
   <div class="text-center my-4">
-    <?php if ($_smarty_tpl->getValue('battle')->getFighter1()->getHealth() > 0 && $_smarty_tpl->getValue('battle')->getFighter2()->getHealth() > 0) {?>
     <form
       action="index.php?page=battleRound"
       method="post"
       style="display: inline"
     >
-      <input
-        type="hidden"
-        name="fighter1"
-        value="<?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getName();?>
-"
-      />
-      <input
-        type="hidden"
-        name="fighter2"
-        value="<?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getName();?>
-"
-      />
-      <button type="submit" class="btn btn-warning btn-lg">Attack</button>
+      <div class="row justify-content-center mb-3">
+        <div class="col-md-5">
+          <label for="fighter1Attack" class="form-label"><strong><?php echo $_smarty_tpl->getValue('battle')->getFighter1()->getName();?>
+ aanval:</strong></label>
+          <select class="form-select" id="fighter1Attack" name="fighter1attack" <?php if ($_smarty_tpl->getValue('battle')->getFighter1()->getHealth() <= 0) {?>disabled<?php }?>>
+            <option value="">Normal Attack</option>
+            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('battle')->getFighter1()->getSpecialAttacks(), 'special');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('special')->value) {
+$foreach0DoElse = false;
+?>
+  <option value="<?php echo $_smarty_tpl->getValue('special');?>
+"><?php echo $_smarty_tpl->getSmarty()->getModifierCallback('capitalize')($_smarty_tpl->getValue('special'));?>
+</option>
+<?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-center justify-content-center">
+          <span class="display-6"></span>
+        </div>
+        <div class="col-md-5">
+          <label for="fighter2Attack" class="form-label"><strong><?php echo $_smarty_tpl->getValue('battle')->getFighter2()->getName();?>
+ aanval:</strong></label>
+          <select class="form-select" id="fighter2Attack" name="fighter2Attack" <?php if ($_smarty_tpl->getValue('battle')->getFighter2()->getHealth() <= 0) {?>disabled<?php }?>>
+            <option value="">Normal Attack</option>
+            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('battle')->getFighter2()->getSpecialAttacks(), 'special');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('special')->value) {
+$foreach1DoElse = false;
+?>
+  <option value="<?php echo $_smarty_tpl->getValue('special');?>
+"><?php echo $_smarty_tpl->getSmarty()->getModifierCallback('capitalize')($_smarty_tpl->getValue('special'));?>
+</option>
+<?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-warning btn-lg"
+        <?php if ($_smarty_tpl->getValue('battle')->getFighter1()->getHealth() <= 0 || $_smarty_tpl->getValue('battle')->getFighter2()->getHealth() <= 0) {?>disabled<?php }?>>
+        Fight Round
+      </button>
     </form>
-    <?php } else { ?>
+    <?php if ($_smarty_tpl->getValue('battle')->getFighter1()->getHealth() <= 0 || $_smarty_tpl->getValue('battle')->getFighter2()->getHealth() <= 0) {?>
     <form
       action="index.php?page=resetHealth"
       method="post"
@@ -199,9 +137,9 @@ if ($_smarty_tpl->getValue('battle')->getFighter2()->getRole() == 'Healer' && !i
       <ul class="mb-0">
         <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('battle')->getBattleLog(), 'regel');
-$foreach0DoElse = true;
+$foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('regel')->value) {
-$foreach0DoElse = false;
+$foreach2DoElse = false;
 ?>
         <li><?php echo $_smarty_tpl->getValue('regel');?>
 </li>
@@ -221,6 +159,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
       >Terug naar Character List</a
     >
   </div>
+  <div class="tenor-gif-embed" data-postid="10432020374864364761" data-share-method="host" data-aspect-ratio="1.02469" data-width="100%"><a href="https://tenor.com/view/faust-limbus-company-butterfly-fire-gif-10432020374864364761">Faust Limbus Company GIF</a>from <a href="https://tenor.com/search/faust-gifs">Faust GIFs</a></div> <?php echo '<script'; ?>
+ type="text/javascript" async src="https://tenor.com/embed.js"><?php echo '</script'; ?>
+>
 </div>
 <?php
 }

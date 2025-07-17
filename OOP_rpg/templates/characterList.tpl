@@ -19,6 +19,7 @@
                     <th>Mana</th>
                     <th>Energy</th>
                     <th>Spirit</th>
+                    <th>Shield</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +56,13 @@
                     <td>
                         {if $character->getRole() == 'Healer' && $character->getSpirit() !== null}
                             {$character->getSpirit()}
+                        {else}
+                            -
+                        {/if}
+                    </td>
+                    <td>
+                        {if $character->getRole() == 'Tank' && $character->getShield() !== null}
+                            {$character->getShield()}
                         {else}
                             -
                         {/if}

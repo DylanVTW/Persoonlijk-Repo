@@ -16,9 +16,18 @@ use Game\Warrior;
 use Game\Mage;
 use Game\Rogue;
 use Game\Healer;
+use Game\Tank;
 
 session_start();
 
+// if(isset($_SESSION['characterStats']) && is_array($_SESSION['characterStats'])) {
+//     $stats = $_SESSION['characterStats'];
+//     Game\Character::$getTotalCharacter = $stats['totalCharacter'] ?? 0;
+//     Game\Character::$characterTypes = $stats['characterTypeCounts'] ?? [];
+//     Game\Character::$getAllCharacterNames() = $stats['characterNames'] ?? [];
+// }
+
+Game\Character::initializeSession();
 
 $template = new Smarty();
 $template->setTemplateDir(__DIR__ . '/templates');
@@ -27,17 +36,17 @@ $template->setCompileDir(__DIR__ . '/templates_c');
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// try {
-//     $database = new Mysql(
-//         $_ENV['DB_HOST'],
-//         $_ENV['DB_NAME'],
-//         $_ENV['DB_USER'],
-//         $_ENV['DB_PASS']
-//     );
-//     DatabaseManager::setIntance($database);
-// } catch (PDOException $error) {
-//     $dberror = $error->getMessage();
-// }
+try {
+    $database = new Mysql(
+        $_ENV['DB_HOST'],
+        $_ENV['DB_NAME'],
+        $_ENV['DB_USER'],
+        $_ENV['DB_PASS']
+    );
+    DatabaseManager::setIntance($database);
+} catch (PDOException $error) {
+    $dberror = $error->getMessage();
+}
 
 
 $characterList = $_SESSION['characterList'] ?? new CharacterList();
@@ -78,17 +87,23 @@ switch ($page) {
                 $character = new Healer($name, $role, $health, $attack, $defense, $range);
                 $character->setSpirit((int) ($_POST['spirit'] ?? 200));
                 break;
-            default:
-                $character = new Character($name, $role, $health, $attack, $defense, $range);
+            case 'Tank':
+                $character = new Tank($name, $role, $health, $attack, $defense, $range);
+                $character->setShield((int) ($_POST['shield'] ?? 150));
                 break;
+            default:
+                $template->assign('error', 'Onbekende of ongeldige character role. Kan geen character aanmaken.');
+                $template->display('error.tpl');
+                return;
+                
         }
 
         // Specifieke eigenschappen instellen voor Warrior en Mage
-        if ($_POST['role'] == 'Warrior' && isset($_POST['rage'])) {
+        if ($_POST['role'] == 'Warrior' && isset($_POST['rage']) && $character instanceof Game\Warrior) {
             $character->setRage($_POST['rage']);
         }
 
-        if ($_POST['role'] == 'Mage' && isset($_POST['mana'])) {
+        if ($_POST['role'] == 'Mage' && isset($_POST['mana']) && $character instanceof Game\Mage) {
             $character->setMana($_POST['mana']);
         }
         if ($_POST['role'] == 'Rogue' && isset($_POST['energy']) && $character instanceof Game\Rogue) {
@@ -96,6 +111,9 @@ switch ($page) {
         }
         if ($_POST['role'] == 'Healer' && isset($_POST['spirit']) && $character instanceof Game\Healer) {
             $character->setSpirit($_POST['spirit']);
+        }
+        if ($_POST['role'] == 'Tank' && isset($_POST['shield']) && $character instanceof Game\Tank) {
+            $character->setShield($_POST['shield']);
         }
 
         // Rest van de logica blijft ongewijzigd
@@ -132,6 +150,11 @@ switch ($page) {
             $character = $characterList->getCharacter($_GET['name']);
             if ($character) {
                 $characterList->removeCharacter($character);
+
+
+                Game\Character::removeCharacterFromStats($character->getName(), $character->getRole());
+
+
                 $template->assign('message', 'Character deleted successfully.');
             } else {
                 $template->assign('message', 'Character not found.');
@@ -140,13 +163,39 @@ switch ($page) {
             $template->assign('message', 'No character name provided.');
         }
         $template->display('error.tpl');
+
+        $_SESSION['characterList'] = $characterList;
         break;
+    case 'characterStats':
+
+    // Haal het totaal aantal characters op via de static method
+    $totalCharacters = Game\Character::getTotalCharacter();
+
+    // Haal alle character namen op via de static method
+    $existingNames = Game\Character::getAllCharacterNames();
+
+    // Maak een array met alle mogelijke types
+    $allTypes = ['Warrior', 'Mage', 'Rogue', 'Healer', 'Tank'];
+    $typeCounts = [];
+    foreach ($allTypes as $type) {
+        $count = Game\Character::getCharacterTypeCount($type);
+        if ($count > 0) {
+            $typeCounts[$type] = $count;
+        }
+    }
+
+    // Wijs alles toe aan het template
+    $template->assign('totalCharacters', $totalCharacters);
+    $template->assign('characterTypeCounts', $typeCounts);
+    $template->assign('characterNames', $existingNames);
+
+    $template->display('characterStatistics.tpl');
+    break;
+    
     case 'battleForm':
-        $characterList = $_SESSION['characterList'] ?? new CharacterList();
-        $characters = $characterList->getCharacters();
-        $template->assign('characters', $characters);
-        $template->display('battleForm.tpl');
-        break;
+    $template->assign('characters', $characterList->getCharacters());
+    $template->display('battleForm.tpl');
+    break;
 
     case 'startBattle':
         $characterList = $_SESSION['characterList'] ?? new CharacterList();
@@ -177,66 +226,15 @@ switch ($page) {
         $template->assign('battle', $battle);
 
         $template->display('battleResult.tpl');
-
-
-
-        
-        // if (empty($_POST['character1']) || empty($_POST['character2'])) {
-        //     echo "bla";
-        //     $template->assign('error', 'One or both characters not found.');
-        //     $template->display('error.tpl');
-        //     break;
-        // }
-        
-        // $character1 = $characterList->getCharacter($_POST['character1']);
-        // $character2 = $characterList->getCharacter($_POST['character2']);
-
-        // if (!$character1 || !$character2) {
-        //     $template->assign('error', 'One or both characters not found.');
-        //     $template->display('error.tpl');
-        //     break;
-        // }
-        
-        // $battle = new Battle();
-        // $maxRounds = isset($_POST['maxRounds']) ? (int) $_POST['maxRounds'] : 10;
-        // $battle->changeMaxRounds($maxRounds);
-
-
-        // $health1_before = $character1->getHealth();
-        // $health2_before = $character2->getHealth();
-
-        // // Start het gevecht
-        // $battleLog = $battle->startFight($character1, $character2);
-
-        // // Health na het gevecht
-        // $health1_after = $character1->getHealth();
-        // $health2_after = $character2->getHealth();
-
-
-
-        // if ($character1->getHealth() > 0 && $character2->getHealth() <= 0) {
-        //     $winner = $character1->getName();
-        // } elseif ($character1->getHealth() > 0 && $character2->getHealth() <= 0) {
-        //     $winner = $character2->getName();
-        // } else {
-        //     $winner = 'draw';
-        // }
-        // $battleSummary = $battleLog;
-        // $template->assign('character1', $character1);
-        // $template->assign('character2', $character2);
-        // $template->assign('health1_before', $health1_before);
-        // $template->assign('health2_before', $health2_before);
-        // $template->assign('health1_after', $health1_after);
-        // $template->assign('health2_after', $health2_after);
-        // $template->assign('winner', $winner);
-        // $template->assign('battleLog', $battleLog);
-        // $template->display('battleResult.tpl');
-
-
-        // $character1->setHealth($battle->getFighter1OriginalHealth());
-        // $character2->setHealth($battle->getFighter2OriginalHealth());
-
-        // $_SESSION['characterList'] = $characterList;
+        break;
+    
+    case 'resetStats':
+        Game\Character::resetAllStatistics();
+        header('Location: index.php?page=characterStats');
+        break;
+    case 'recalculateStats':
+        Game\Character::recalculateStatistics($characterList);
+        header('Location: index.php?page=characterStats');
         break;
 
     case 'battleRound':
@@ -248,13 +246,22 @@ switch ($page) {
         }
         $battle = $_SESSION['battle'];
 
+        $attack1 = $_POST['fighter1Attack'] ?? null;
+        $attack2 = $_POST['fighter2Attack'] ?? null;
+
+        $attack1 = ($attack1 === '' || $attack1 === 'normal') ? null : $attack1;
+        $attack2 = ($attack2 === '' || $attack2 === 'normal') ? null : $attack2;
+
+        $battle->setAttackForFighter($battle->getFighter2(), $attack1);
+        $battle->setAttackForFighter($battle->getFighter1(), $attack2);
+
         $battle->executeTurn($battle->getFighter1(), $battle->getFighter2());
 
         $_SESSION['battle'] = $battle;
 
         $template->assign('battle', $battle);
 
-        $template->display('battleResult.tpl');
+        $template->display(template: 'battleResult.tpl');
         break;
 
     case 'resetHealth':
@@ -279,11 +286,12 @@ switch ($page) {
         $template->display('testDatabase.tpl');
         break;
     case 'createItem':
-        $template->display('createItem.tpl');
+        $template->display('createItemForm.tpl');
         break;
     case "saveItem":
         if (!empty($_POST['name']) && !empty($_POST['type']) && !empty($_POST['value'])) {
-            $item = new Item($_POST['name'], $_POST['type'], $_POST['value']);
+            $item = new Item($_POST['name'], $_POST['type'], (float)$_POST['value']);
+
             if ($item->save()) {
                 $template->assign('item', $item);
                 $template->display('itemCreated.tpl');
@@ -296,8 +304,8 @@ switch ($page) {
             $template->display('error.tpl');
         }
         break;
-    case 'listItem':
-        $itemlist = new ItemList();
+    case 'listItems':
+        $itemList = new ItemList();
         $params = [];
         if (!empty($_POST['id'])) {
             $params['id'] = (int) $_POST['id'];
@@ -322,17 +330,16 @@ switch ($page) {
         } else {
             $itemList->loadAllFromDatabase();
         }
-        $itemlist->loadAllFromDatabase();
-        $template->assign('items', $itemlist->getItems());
-        $template->assign('count', $itemlist->count());
+        $template->assign('items', $itemList->getItems());
+        $template->assign('count', $itemList->count());
         $template->display('itemList.tpl');
         break;
     case 'updateItem':
-        if (empty($_GET['id'])) {
+        if (!empty($_GET['id'])) {
             $item = Item::loadFromDatabase((int) $_GET['id']);
             if ($item !== null) {
                 $template->assign('item', $item);
-                $template->display('updateItem.tpl');
+                $template->display('updateItemForm.tpl');
             } else {
                 $template->assign('error', 'Item not found.');
                 $template->display('error.tpl');
@@ -376,6 +383,7 @@ switch ($page) {
             $item = Item::loadFromDatabase((int) $_POST['id']);
             if ($item !== null) {
                 if ($item->delete()) {
+                    $template->assign('item', $item);
                     $template->assign('message', 'Item deleted successfully.');
                     $template->display('itemDeleted.tpl');
                 } else {
@@ -400,8 +408,16 @@ switch ($page) {
 
 
 
+Game\Character::saveSession();
 // var_dump(DatabaseManager::getInstance());
 $_SESSION['characterList'] = $characterList;
+
+// $_SESSION['characterStats'] = [
+//     'totalCharacter' => Game\Character::$getTotalCharacter,
+//     'characterTypeCounts' => Game\Character::$characterTypes,
+//     'characterNames' => Game\Character::$getAllCharacterNames()
+// ];
+
 
 
 

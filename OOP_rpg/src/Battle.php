@@ -32,13 +32,15 @@ class Battle {
     private int $fighter1OriginalHealth = 100;
     private int $fighter2OriginalHealth = 100;
 
-    private Character|Warrior|Mage|Rogue|Healer $fighter1;
-    private Character|Warrior|Mage|Rogue|Healer $fighter2;
+    private Character $fighter1;
+    private Character $fighter2;
+
+    private array $selectedAttacks = ['fighter1' => null, 'fighter2' => null];
 
 
     public function __construct(
-        Character|Warrior|Mage|Rogue|Healer $fighter1,
-        Character|Warrior|Mage|Rogue|Healer $fighter2,
+        Character $fighter1,
+        Character $fighter2,
         int $maxRounds = 10)
     {
         $this->fighter1 = $fighter1;
@@ -48,6 +50,18 @@ class Battle {
         $this->fighter1OriginalHealth = $fighter1->getHealth();
         $this->fighter2OriginalHealth = $fighter2->getHealth();
     }
+
+
+    public function setAttackForFighter(Character $fighter, ?string $attackName): void
+    {
+        if ($fighter === $this->fighter1)
+        {
+            $this->selectedAttacks['fighter1'] = $attackName;
+        } elseif ($fighter === $this->fighter2) {
+            $this->selectedAttacks['fighter2'] = $attackName;
+        }
+    }
+
 
     /**
      * Geeft de battle log terug.
@@ -77,10 +91,10 @@ class Battle {
         return $this->roundNumber;
     }
 
-    public function getFighter1(): Character|Warrior|Mage|Rogue|Healer {
+    public function getFighter1() {
         return $this->fighter1;
     }
-    public function getFighter2(): Character|Warrior|Mage|Rogue|Healer {
+    public function getFighter2() {
         return $this->fighter2;
     }
 
@@ -103,9 +117,16 @@ class Battle {
     }
 
 
-    private function executeAttack(Character $attacker, Character $defender)
+    private function executeAttack(Character $attacker, Character $defender, ?string $specialAttack = null)
     {
-        $damage = $this->calculateDamage($attacker, $defender);
+        if($specialAttack)
+        {
+            $result = $attacker->executeSpecialAttack($specialAttack);
+            $this->battleLog[] = "Special attack performed by {$attacker->getName()}: {$specialAttack}";
+            $damage = $this->calculateDamage($attacker, $defender); // Optionally adjust if special attack changes damage
+        } else {
+            $damage = $this->calculateDamage($attacker, $defender);
+        }
 
         if(method_exists($defender, 'takeDamage')){
             $defender->takeDamage($damage);
@@ -125,33 +146,42 @@ class Battle {
 
     public function executeTurn($attacker, $defender): string
     {
-        $damage = $this->calculateDamage($attacker, $defender);
+                // Voer aanval uit voor fighter1
+        $attack1 = $this->selectedAttacks['fighter1'];
+        $this->executeAttack($this->fighter1, $this->fighter2, $attack1);
 
-        if (method_exists($defender, 'takeDamage')) {
-            $defender->takeDamage($damage);
-        } else {
-            $defender->setHealth($defender->getHealth() - $damage);
+        // Check of fighter2 nog leeft
+        if ($this->fighter2->getHealth() > 0) {
+            $attack2 = $this->selectedAttacks['fighter2'];
+            $this->executeAttack($this->fighter2, $this->fighter1, $attack2);
         }
 
-        $description = "Ronde {$this->roundNumber}: <strong>{$attacker->getName()}</strong> valt aan en doet <strong>{$damage}</strong> schade aan <strong>{$defender->getName()}</strong>.";
-         "{$defender->getName()} heeft nu <strong>{$defender->getHealth()}</strong> health.<br>";
+        // Reset geselecteerde aanvallen
+        $this->selectedAttacks = ['fighter1' => null, 'fighter2' => null];
 
-        $this->battleLog[] = $description;
+        // Reset tijdelijke stats van beide fighters
+        $this->fighter1->resetAttributes();
+        $this->fighter2->resetAttributes();
 
-        if ($defender->getHealth() <=0)
-        {
-            $ko = "<strong>🏆 {$attacker->getName()} heeft gewonnen!</strong><br>";
-            $this->battleLog[] = $ko;
-            $description .= $ko;
-        }
-        return $description;
+        $this->roundNumber++;
+
+        return "Beurt uitgevoerd. Bekijk het gevechtslog voor details.";
     }
 
     public function endBattle(): void
     {
-        $this->fighter1->setHealth($this->fighter1OriginalHealth);
-        $this->fighter2->setHealth($this->fighter2OriginalHealth);
-        $this->battleLog[] = "Het gevecht is beëindigd.";
+         // Reset health naar originele waarde
+    $this->fighter1->setHealth($this->fighter1OriginalHealth);
+    $this->fighter2->setHealth($this->fighter2OriginalHealth);
+
+    // Reset ook class-specifieke resources als nodig
+    if(method_exists($this->fighter1, 'resetAttributes')) {
+        $this->fighter1->resetAttributes();
+    }
+    if(method_exists($this->fighter2, 'resetAttributes')) {
+        $this->fighter2->resetAttributes();
+    }
+    $this->battleLog[] = "Het gevecht is beëindigd en health is gereset.";
     }
 
     /**

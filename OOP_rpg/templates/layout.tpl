@@ -241,8 +241,22 @@
               <a class="nav-link active" aria-current="page" href="index.php?page=battleForm">Battle Arena</a>
               </li>
               <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.php?page=characterStats">Character Statistics</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.php?page=createItem">
+                  Create Item
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.php?page=listItems">
+                  Item List
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link disabled" aria-disabled="true">Disabled</a>
               </li>
+
             </ul>
             <form class="d-flex" role="search">
               <input
