@@ -1,1 +1,1 @@
-Let op! ik heb deze game gemaakt voor school. Alles wat in deze folder staat is allemaal gemaakt aan de hand van schoolopdrachten. 
+Let op! ik heb deze game gemaakt voor school. Alles wat in deze folder staat is gemaakt aan de hand van schoolopdrachten. 
