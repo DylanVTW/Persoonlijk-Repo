@@ -1,1 +1,2 @@
 # Persoonlijk-Repo
+Let op! dit zijn projecten gemaakt voor school. Alle functionaliteiten zijn gemaakt op Userstories gebasseerd op de lesstof van die periode. Geen van deze projecten zijn gemaakt voor eigen benutteging.
